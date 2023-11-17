@@ -4,15 +4,35 @@
     }
 </style>
 <?php
+stars('正三角形',9);
+stars('菱形',9);
+stars('矩形',9);
+stars('變形矩形',9);
 
-triangle(5);
-triangle(20);
 
 
+function stars($shape,$size){
+    switch($shape){
+        case'正三角形';
+            triangle($size);
+        break;
+        case'菱形';
+            diamond($size);
+        break;
+        case'矩形';
+            retangle($size);
+        break;
+        case'變形矩形';
+            trapezoid($size);
+        break;
+    }
+}
 
+// triangle(5);
+// triangle(20);
 
-function triangle($size)
-{
+// 正三角形
+function triangle($size){
     for ($i = 0; $i < $size; $i++) { //行列數
         for ($j = 0; $j < ($size - 1 - $i); $j++) { //內圈印空格數
             echo "&nbsp;";
@@ -26,8 +46,8 @@ function triangle($size)
 }
 
 
-diamond(7);
-
+// diamond(7);
+// 菱形
 function diamond($size){
     $mid = floor(($size * 2 - 1) / 2);
     $temp = 0;
@@ -50,12 +70,12 @@ function diamond($size){
     }
 }
 
-reangle(5);
-reangle(7);
-reangle(9);
+// retangle(5);
+// retangle(7);
+// retangle(9);
 
-
-function reangle($size){
+// 矩形
+function retangle($size){
     for($i=0;$i<$size;$i++){
 
     for($j=0;$j<$size;$j++){
@@ -72,6 +92,25 @@ function reangle($size){
 }
 }
 
+function trapezoid($size){
+    for($i=0;$i<$size;$i++){
 
+    for($j=0;$j<$size;$j++){
+        if($i==0 || $i==($size-1)){
+        echo "*";
+        }else if($i==$j || $i+$j==($size-1)){
+            echo "<span style='color:red'>*</span>";
+        }
+        else if($j==0 || $j==($size-1)){
+            echo "*";
+        }else{
+            echo "&nbsp;";
+        }
+    
+    }
+    echo "<br>";
+}
+
+}
 
 ?>
