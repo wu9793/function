@@ -43,6 +43,7 @@ echo "<hr>";
 <h2>自訂函式預設值</h2>
 
 <?php
+// 預設值 $c=5
 function sum3($a,$b,$c=5){
     $sum=($a+$b)*$c;
     echo "$a 、 $b ,倍數 $c <br>";
