@@ -19,15 +19,13 @@
 
 // del('students',['dept'=>5,'status_code'=>'001']);
 
-function pdo($db){
-    $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
-    $pdo = new PDO($dsn, 'root', '');
+date_default_timezone_set("Asia/Taipei");
+$dsn = "mysql:host=localhost;charset=utf8;dbname=school";
+$pdo = new PDO($dsn, 'root', '');
 
-    return $pdo;
-}
-
-function all($table = null, $where = '', $other = ''){
-    $pdo=pdo('school');
+function all($table = null, $where = '', $other = '')
+{
+    global $pdo;
     $sql = "select * from `$table` ";
 
     if (isset($table) && !empty($table)) {
@@ -54,9 +52,9 @@ function all($table = null, $where = '', $other = ''){
 }
 
 
-function find($table, $id){
-    $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
-    $pdo = new PDO($dsn, 'root', '');
+function find($table, $id)
+{
+    global $pdo;
     $sql = "select * from `$table` ";
 
     // 判斷是否為陣列
@@ -78,55 +76,54 @@ function find($table, $id){
 
 
 
-function update($table,$id,$cols){
-    $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
-    $pdo = new PDO($dsn, 'root', '');
+function update($table, $id, $cols)
+{
+    global $pdo;
 
-    $sql="update `$table` set";
+    $sql = "update `$table` set";
 
     if (!empty($cols)) {
         foreach ($cols as $col => $value) {
             $tmp[] = "`$col`='$value'";
         }
-}else{
-    echo "錯誤:缺少要編輯的欄位陣列";
-}
-
-$sql .= join(",",$tmp);
-
-if (is_array($id)){
-    foreach ($id as $col => $value) {
-        $tmp[] = "`$col`='$value'";
+    } else {
+        echo "錯誤:缺少要編輯的欄位陣列";
     }
-    $sql .=" where ".join(" && ",$tmp);
-}else if (is_numeric($id)) {
-    $sql .= " where `id`='$id'";
-} else {
-    echo "錯誤:參數的資料型態必須是數字或陣列";
+
+    $sql .= join(",", $tmp);
+
+    if (is_array($id)) {
+        foreach ($id as $col => $value) {
+            $tmp[] = "`$col`='$value'";
+        }
+        $sql .= " where " . join(" && ", $tmp);
+    } else if (is_numeric($id)) {
+        $sql .= " where `id`='$id'";
+    } else {
+        echo "錯誤:參數的資料型態必須是數字或陣列";
+    }
+
+    echo $sql;
+    return $pdo->exec($sql);
 }
 
-echo $sql;
-return $pdo->exec($sql);
-}
 
+function insert($table, $values)
+{
+    global $pdo;
+    $sql = "insert into `$table`";
+    $cols = "(`" . join("`,`", array_keys($values)) . "`)";
+    $vals = "('" . join("','", $values) . "')";
 
-function insert($table,$values){
-    $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
-    $pdo = new PDO($dsn, 'root', '');
-    
-    $sql="insert into `$table`";
-    $cols="(`".join("`,`",array_keys($values))."`)";
-    $vals="('".join("','",$values)."')";
-
-    $sql=$sql . $cols ."values ".$vals;
+    $sql = $sql . $cols . "values " . $vals;
 
     return $pdo->exec($sql);
- }
+}
 
 
- function del($table, $id){
-    $dsn = "mysql:host=localhost;charset=utf8;dbname=school";
-    $pdo = new PDO($dsn, 'root', '');
+function del($table, $id)
+{
+    global $pdo;
     $sql = "delete from `$table` where ";
 
     // 判斷是否為陣列
@@ -134,19 +131,20 @@ function insert($table,$values){
         foreach ($id as $col => $value) {
             $tmp[] = "`$col`='$value'";
         }
-        $sql .=join(" && ", $tmp);
+        $sql .= join(" && ", $tmp);
         // 判斷是否為數字
     } else if (is_numeric($id)) {
-        $sql .="`id`='$id'";
+        $sql .= "`id`='$id'";
     } else {
         echo "錯誤:參數的資料型態必須是數字或陣列";
     }
     // echo $sql;
 
     return $pdo->exec($sql);
- }
+}
 
-function dd($array){
+function dd($array)
+{
     echo "<pre>";
     print_r($array);
     echo "</pre>";
